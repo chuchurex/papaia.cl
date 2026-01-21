@@ -107,14 +107,65 @@ const API_BASE = '/api';
 
 async function fetchCaptures() {
   try {
-    const response = await fetch(`${API_BASE}/captures`);
+    const response = await fetch(`${API_BASE}/captaciones`);
     if (!response.ok) throw new Error('Failed to fetch captures');
-    return await response.json();
+    const result = await response.json();
+
+    // Transform backend captaciones to frontend format
+    return (result.data || []).map(c => ({
+      id: c.id,
+      title: c.datosExtraidos?.descripcion_raw || `Captación de ${c.telefono}`,
+      location: c.datosExtraidos?.direccion?.comuna || 'Sin ubicación',
+      price: c.datosExtraidos?.precio?.valor || 0,
+      currency: c.datosExtraidos?.precio?.moneda || 'CLP',
+      status: mapEstado(c.estado),
+      date: new Date(c.updatedAt),
+      phone: c.telefono
+    }));
   } catch (error) {
     console.warn('Using mock data:', error.message);
     return mockCaptures;
   }
 }
+
+function mapEstado(estado) {
+  const map = {
+    'inicio': 'draft',
+    'recibiendo_datos': 'draft',
+    'procesando_audio': 'draft',
+    'procesando_fotos': 'draft',
+    'validando': 'pending',
+    'listo_para_publicar': 'pending',
+    'esperando_aprobacion': 'pending',
+    'publicando': 'approved',
+    'completado': 'published',
+    'error': 'draft'
+  };
+  return map[estado] || 'draft';
+}
+
+// Load captaciones on page load
+async function loadCaptaciones() {
+  const captures = await fetchCaptures();
+  console.log('📊 Captaciones cargadas:', captures.length);
+  updateStatsUI(captures);
+}
+
+function updateStatsUI(captures) {
+  const totalEl = document.querySelector('.stat-card:nth-child(1) .stat-value');
+  if (totalEl) totalEl.textContent = captures.length;
+
+  const pendingCount = captures.filter(c => c.status === 'pending').length;
+  const pendingEl = document.querySelector('.stat-card:nth-child(2) .stat-value');
+  if (pendingEl) pendingEl.textContent = pendingCount;
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  loadCaptaciones();
+  // Refresh every 30 seconds
+  setInterval(loadCaptaciones, 30000);
+});
 
 async function approveCapture(captureId) {
   try {

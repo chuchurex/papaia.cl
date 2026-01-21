@@ -8,7 +8,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { webhookRouter } from './integrations/whatsapp/webhook.js';
-import { callbellWebhookRouter } from './integrations/callbell/webhook.js';
+import { callbellWebhookRouter, getCaptaciones } from './integrations/callbell/webhook.js';
 import { logger } from './utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,6 +27,37 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/webhook', webhookRouter);           // Legacy Meta API
 app.use('/webhook/callbell', callbellWebhookRouter);  // Callbell API
 
+// ============ API para Dashboard ============
+
+// Obtener todas las captaciones
+app.get('/api/captaciones', (req, res) => {
+  const captaciones = getCaptaciones();
+  res.json({
+    success: true,
+    data: captaciones,
+    total: captaciones.length
+  });
+});
+
+// Obtener estadísticas
+app.get('/api/stats', (req, res) => {
+  const captaciones = getCaptaciones();
+  const stats = {
+    total: captaciones.length,
+    porEstado: {},
+    ultimaActividad: null
+  };
+
+  captaciones.forEach(c => {
+    stats.porEstado[c.estado] = (stats.porEstado[c.estado] || 0) + 1;
+    if (!stats.ultimaActividad || c.updatedAt > stats.ultimaActividad) {
+      stats.ultimaActividad = c.updatedAt;
+    }
+  });
+
+  res.json({ success: true, data: stats });
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({
@@ -40,6 +71,8 @@ app.get('/health', (req, res) => {
 app.listen(PORT, () => {
   logger.info(`🍈 PAPAIA corriendo en puerto ${PORT}`);
   logger.info(`📱 Webhook disponible en /webhook`);
+  logger.info(`📊 API disponible en /api`);
 });
 
 export default app;
+

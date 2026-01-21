@@ -46,29 +46,39 @@ Responde SOLO con un JSON válido con esta estructura:
  * @returns {Promise<Object>} Datos extraídos
  */
 export async function procesarAudio(audio) {
-  logger.info('Procesando audio', { audioId: audio.id });
+  logger.info('Procesando audio (MOCK)', { audioId: audio.id });
 
+  // MVP: Retornar datos mock mientras no tengamos Google Cloud
+  // TODO: Descomentar cuando se configure Gemini
+  /*
   try {
-    // Gemini 1.5 Pro puede procesar audio directamente (multimodal)
     const resultado = await gemini.processAudio(audio.url, PROMPT_EXTRACCION);
-
     const datosExtraidos = JSON.parse(resultado);
-
-    // Validar datos críticos
     const validacion = validarCaptacion(datosExtraidos);
     if (!validacion.valido) {
-      logger.warn('Datos extraídos con problemas', {
-        errores: validacion.errores,
-        warnings: validacion.warnings
-      });
+      logger.warn('Datos extraídos con problemas', validacion);
     }
-
     return datosExtraidos;
-
   } catch (error) {
     logger.error('Error procesando audio', { error: error.message });
     throw error;
   }
+  */
+
+  // MOCK: Datos de prueba
+  return {
+    tipo: null,
+    operacion: null,
+    precio: { valor: null, moneda: 'CLP' },
+    superficie: { total: null, util: null },
+    dormitorios: null,
+    banos: null,
+    estacionamientos: null,
+    bodega: null,
+    direccion: { calle: null, numero: null, comuna: null },
+    descripcion_raw: 'Audio recibido - pendiente procesamiento',
+    usps_detectados: []
+  };
 }
 
 /**
@@ -77,33 +87,48 @@ export async function procesarAudio(audio) {
  * @returns {Promise<Object>} Datos extraídos
  */
 export async function procesarTexto(texto) {
-  logger.info('Procesando texto', { longitud: texto.length });
+  logger.info('Procesando texto (MOCK)', { longitud: texto.length });
 
-  try {
-    const prompt = PROMPT_EXTRACCION.replace('{texto}', texto);
-    const resultado = await gemini.generateText(prompt, {
-      temperature: 0.1, // Bajo para extracción precisa
-      maxTokens: 1000
-    });
+  // MVP: Extracción básica con regex mientras no tengamos Gemini
+  const datos = {
+    tipo: null,
+    operacion: null,
+    precio: { valor: null, moneda: 'CLP' },
+    superficie: { total: null, util: null },
+    dormitorios: null,
+    banos: null,
+    estacionamientos: null,
+    bodega: null,
+    direccion: { calle: null, numero: null, comuna: null },
+    descripcion_raw: texto.slice(0, 200),
+    usps_detectados: []
+  };
 
-    // Limpiar respuesta (a veces viene con markdown)
-    const jsonLimpio = resultado
-      .replace(/```json\n?/g, '')
-      .replace(/```\n?/g, '')
-      .trim();
-
-    const datosExtraidos = JSON.parse(jsonLimpio);
-
-    // Validar
-    const validacion = validarCaptacion(datosExtraidos);
-    logger.debug('Validación de extracción', validacion);
-
-    return datosExtraidos;
-
-  } catch (error) {
-    logger.error('Error procesando texto', { error: error.message });
-    throw error;
+  // Extracción básica con regex
+  const precioMatch = texto.match(/(\d{1,3}(?:\.\d{3})*(?:\.\d{3})?|\d+)\s*(uf|UF|millones?|palos?)?/i);
+  if (precioMatch) {
+    let valor = parseInt(precioMatch[1].replace(/\./g, ''));
+    if (/palo|millon/i.test(precioMatch[2] || '')) valor *= 1000000;
+    datos.precio.valor = valor;
+    datos.precio.moneda = /uf/i.test(precioMatch[2] || '') ? 'UF' : 'CLP';
   }
+
+  const m2Match = texto.match(/(\d+)\s*(?:m2|metros?|mts?)/i);
+  if (m2Match) datos.superficie.total = parseInt(m2Match[1]);
+
+  const dormMatch = texto.match(/(\d+)\s*(?:dorm|dormitorio|pieza|habitacion)/i);
+  if (dormMatch) datos.dormitorios = parseInt(dormMatch[1]);
+
+  const banoMatch = texto.match(/(\d+)\s*(?:baño|bano)/i);
+  if (banoMatch) datos.banos = parseInt(banoMatch[1]);
+
+  if (/depa|departamento/i.test(texto)) datos.tipo = 'departamento';
+  if (/casa/i.test(texto)) datos.tipo = 'casa';
+  if (/venta|vendo/i.test(texto)) datos.operacion = 'venta';
+  if (/arriendo|arriendo/i.test(texto)) datos.operacion = 'arriendo';
+
+  logger.debug('Datos extraídos (MOCK)', datos);
+  return datos;
 }
 
 /**

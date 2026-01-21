@@ -171,3 +171,12 @@ function limpiarExpiradas() {
 
 // Limpiar cada hora
 setInterval(limpiarExpiradas, 60 * 60 * 1000);
+
+/**
+ * Obtiene todas las captaciones (para API)
+ * @returns {Array} Array de captaciones
+ */
+export function getCaptaciones() {
+  return Array.from(captaciones.values());
+}
+

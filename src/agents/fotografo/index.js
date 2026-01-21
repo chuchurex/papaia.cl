@@ -57,25 +57,34 @@ export async function procesarFotos(fotos) {
  * @returns {Promise<Object>} Resultado del procesamiento
  */
 async function procesarFoto(foto) {
+  // MVP: Mock sin Vision API
+  logger.info('Procesando foto (MOCK)', { fotoId: foto.id });
+
+  // Retornar datos mock - todas las fotos son válidas por ahora
+  return {
+    id: foto.id,
+    urlOriginal: foto.url,
+    urlMejorada: foto.url,
+    categoria: CATEGORIAS.OTRO,
+    score: 75,
+    metadata: {
+      clasificacion: { categoria: CATEGORIAS.OTRO, confianza: 0.8 },
+      calidad: { score: 75, brillo: 80, nitidez: 70, composicion: 75 }
+    },
+    valida: true
+  };
+
+  /* TODO: Descomentar cuando se configure Google Vision
   try {
-    // 1. Clasificar la foto
     const clasificacion = await clasificarFoto(foto);
-
-    // 2. Evaluar calidad técnica
     const calidad = await evaluarCalidad(foto);
-
-    // 3. Verificar contenido ético
     const etica = await verificarEtica(foto);
 
     if (!etica.valida) {
-      logger.warn('Foto rechazada por contenido', {
-        fotoId: foto.id,
-        razon: etica.razon
-      });
+      logger.warn('Foto rechazada por contenido', { fotoId: foto.id, razon: etica.razon });
       return { ...foto, valida: false, razon: etica.razon };
     }
 
-    // 4. Aplicar mejoras si es necesario
     let urlMejorada = foto.url;
     if (calidad.requiereMejora) {
       urlMejorada = await mejorarFoto(foto, calidad.mejoras);
@@ -87,17 +96,14 @@ async function procesarFoto(foto) {
       urlMejorada,
       categoria: clasificacion.categoria,
       score: calcularScore(clasificacion, calidad),
-      metadata: {
-        clasificacion,
-        calidad
-      },
+      metadata: { clasificacion, calidad },
       valida: true
     };
-
   } catch (error) {
     logger.error('Error procesando foto', { fotoId: foto.id, error: error.message });
     return { ...foto, valida: false, razon: 'Error de procesamiento' };
   }
+  */
 }
 
 /**
