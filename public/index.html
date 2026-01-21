@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PAPAIA - El CRM Invisible para captación inmobiliaria vía WhatsApp">
+  <title>PAPAIA Dashboard | Captación Inmobiliaria</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍈</text></svg>">
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">🍈</div>
+        <span class="logo-text">PAPAIA</span>
+      </div>
+
+      <nav>
+        <ul class="nav-menu">
+          <li>
+            <a href="#" class="nav-item active" data-page="dashboard">
+              <span class="nav-item-icon">📊</span>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-page="captures">
+              <span class="nav-item-icon">📥</span>
+              <span>Captaciones</span>
+              <span class="nav-item-badge">3</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-page="pending">
+              <span class="nav-item-icon">⏳</span>
+              <span>Por aprobar</span>
+              <span class="nav-item-badge">2</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-page="published">
+              <span class="nav-item-icon">✅</span>
+              <span>Publicadas</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item" data-page="settings">
+              <span class="nav-item-icon">⚙️</span>
+              <span>Configuración</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="user-menu">
+        <div class="user-info">
+          <div class="user-avatar">VC</div>
+          <div class="user-details">
+            <div class="user-name">Víctor CCO</div>
+            <div class="user-role">Corredor Premium</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+      <!-- Dashboard Page -->
+      <div id="page-dashboard" class="page active">
+        <header class="page-header">
+          <div>
+            <h1 class="page-title">¡Hola, Víctor! 👋</h1>
+            <p class="page-subtitle">Aquí está el resumen de tu actividad</p>
+          </div>
+          <button class="btn btn-primary">
+            <span>📱</span>
+            Nueva captación
+          </button>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card animate-in" style="animation-delay: 0.1s">
+            <div class="stat-icon primary">📥</div>
+            <div class="stat-content">
+              <div class="stat-value">12</div>
+              <div class="stat-label">Captaciones este mes</div>
+            </div>
+          </div>
+
+          <div class="stat-card animate-in" style="animation-delay: 0.2s">
+            <div class="stat-icon warning">⏳</div>
+            <div class="stat-content">
+              <div class="stat-value">2</div>
+              <div class="stat-label">Pendientes de aprobar</div>
+            </div>
+          </div>
+
+          <div class="stat-card animate-in" style="animation-delay: 0.3s">
+            <div class="stat-icon success">✅</div>
+            <div class="stat-content">
+              <div class="stat-value">8</div>
+              <div class="stat-label">Publicadas activas</div>
+            </div>
+          </div>
+
+          <div class="stat-card animate-in" style="animation-delay: 0.4s">
+            <div class="stat-icon info">👁️</div>
+            <div class="stat-content">
+              <div class="stat-value">1.2K</div>
+              <div class="stat-label">Visitas totales</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Captures -->
+        <section class="captures-section animate-in" style="animation-delay: 0.5s">
+          <div class="section-header">
+            <h2 class="section-title">Captaciones recientes</h2>
+            <button class="btn btn-secondary">Ver todas</button>
+          </div>
+
+          <table class="captures-table">
+            <thead>
+              <tr>
+                <th>Propiedad</th>
+                <th>Precio</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="captures-table-body">
+              <tr>
+                <td>
+                  <div class="property-preview">
+                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=100&h=100&fit=crop" alt="" class="property-image">
+                    <div class="property-info">
+                      <span class="property-title">Departamento 3D 2B</span>
+                      <span class="property-location">📍 Providencia</span>
+                    </div>
+                  </div>
+                </td>
+                <td>UF 4.500</td>
+                <td><span class="status-badge pending"><span class="status-dot"></span>Por aprobar</span></td>
+                <td>Hace 2 horas</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn btn-primary btn-icon" title="Aprobar">✓</button>
+                    <button class="btn btn-ghost btn-icon" title="Ver">👁️</button>
+                    <button class="btn btn-ghost btn-icon" title="Editar">✏️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="property-preview">
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=100&h=100&fit=crop" alt="" class="property-image">
+                    <div class="property-info">
+                      <span class="property-title">Casa 4D 3B con jardín</span>
+                      <span class="property-location">📍 Las Condes</span>
+                    </div>
+                  </div>
+                </td>
+                <td>UF 12.000</td>
+                <td><span class="status-badge pending"><span class="status-dot"></span>Por aprobar</span></td>
+                <td>Hace 5 horas</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn btn-primary btn-icon" title="Aprobar">✓</button>
+                    <button class="btn btn-ghost btn-icon" title="Ver">👁️</button>
+                    <button class="btn btn-ghost btn-icon" title="Editar">✏️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="property-preview">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=100&h=100&fit=crop" alt="" class="property-image">
+                    <div class="property-info">
+                      <span class="property-title">Oficina 80m²</span>
+                      <span class="property-location">📍 Vitacura</span>
+                    </div>
+                  </div>
+                </td>
+                <td>UF 6.200</td>
+                <td><span class="status-badge published"><span class="status-dot"></span>Publicada</span></td>
+                <td>Hace 1 día</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn btn-ghost btn-icon" title="Ver">👁️</button>
+                    <button class="btn btn-ghost btn-icon" title="Editar">✏️</button>
+                    <button class="btn btn-ghost btn-icon" title="Pausar">⏸️</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="property-preview">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=100&h=100&fit=crop" alt="" class="property-image">
+                    <div class="property-info">
+                      <span class="property-title">Loft moderno 1D 1B</span>
+                      <span class="property-location">📍 Ñuñoa</span>
+                    </div>
+                  </div>
+                </td>
+                <td>UF 3.100</td>
+                <td><span class="status-badge draft"><span class="status-dot"></span>Borrador</span></td>
+                <td>Hace 2 días</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn btn-ghost btn-icon" title="Ver">👁️</button>
+                    <button class="btn btn-ghost btn-icon" title="Editar">✏️</button>
+                    <button class="btn btn-ghost btn-icon" title="Eliminar">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+
+      <!-- Other pages (placeholder) -->
+      <div id="page-captures" class="page" style="display: none;">
+        <header class="page-header">
+          <div>
+            <h1 class="page-title">Captaciones</h1>
+            <p class="page-subtitle">Todas tus captaciones en un solo lugar</p>
+          </div>
+        </header>
+        <div class="empty-state">
+          <div class="empty-state-icon">📥</div>
+          <p class="empty-state-text">Las captaciones en proceso aparecerán aquí</p>
+          <button class="btn btn-primary">Iniciar captación vía WhatsApp</button>
+        </div>
+      </div>
+
+      <div id="page-pending" class="page" style="display: none;">
+        <header class="page-header">
+          <div>
+            <h1 class="page-title">Por aprobar</h1>
+            <p class="page-subtitle">Revisa y aprueba tus publicaciones</p>
+          </div>
+        </header>
+      </div>
+
+      <div id="page-published" class="page" style="display: none;">
+        <header class="page-header">
+          <div>
+            <h1 class="page-title">Publicadas</h1>
+            <p class="page-subtitle">Tus propiedades activas en el mercado</p>
+          </div>
+        </header>
+      </div>
+
+      <div id="page-settings" class="page" style="display: none;">
+        <header class="page-header">
+          <div>
+            <h1 class="page-title">Configuración</h1>
+            <p class="page-subtitle">Personaliza tu experiencia PAPAIA</p>
+          </div>
+        </header>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
