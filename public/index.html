@@ -67,11 +67,22 @@
 
       <div class="user-menu">
         <div class="user-info">
-          <div class="user-avatar">VC</div>
+          <div class="user-avatar">US</div>
           <div class="user-details">
-            <div class="user-name">Víctor CCO</div>
+            <div class="user-name">Usuario Demo</div>
             <div class="user-role">Corredor Premium</div>
           </div>
+        </div>
+      </div>
+
+      <!-- WhastApp Authentication -->
+      <div id="whatsapp-state" class="p-4 mt-4 text-center">
+        <div id="qr-container" style="display: none;">
+          <p class="text-xs text-gray-400 mb-2">Escanea para conectar:</p>
+          <img id="qr-code-img" src="" alt="QR Code" style="width: 150px; border-radius: 8px;">
+        </div>
+        <div id="whatsapp-connected" style="display: none;">
+          <p class="text-xs text-green-400">✅ WhatsApp Conectado</p>
         </div>
       </div>
     </aside>
@@ -82,7 +93,7 @@
       <div id="page-dashboard" class="page active">
         <header class="page-header">
           <div>
-            <h1 class="page-title">¡Hola, Víctor! 👋</h1>
+            <h1 class="page-title">¡Hola! 👋</h1>
             <p class="page-subtitle">Aquí está el resumen de tu actividad</p>
           </div>
           <button class="btn btn-primary">

@@ -1,72 +1,133 @@
-# PAPAIA 🍈
+# PAPAIA
 
-> **"El CRM Invisible"** - Agente conversacional para captación inmobiliaria vía WhatsApp
+> **"El CRM Invisible"** - Agente conversacional para captacion inmobiliaria via WhatsApp
 
-## ¿Qué es PAPAIA?
+## Que es PAPAIA?
 
-PAPAIA es una arquitectura cognitiva que transforma inputs desordenados (audios, fotos, ubicación) en activos inmobiliarios de alto valor, operando completamente dentro de WhatsApp.
+PAPAIA es una arquitectura cognitiva que transforma inputs desordenados (audios, fotos, ubicacion) en activos inmobiliarios de alto valor, operando completamente dentro de WhatsApp.
 
-- **Interfaz Única**: WhatsApp. Si el usuario sabe enviar un audio, sabe usar el sistema.
-- **Backend**: Orquestador que convierte inputs en datos estructurados.
-- **Integración**: Inyecta datos en CRMs existentes (Prop360, portales inmobiliarios).
+- **Interfaz Unica**: WhatsApp. Si el usuario sabe enviar un audio, sabe usar el sistema.
+- **Backend Inteligente**: Orquestador que convierte inputs en datos estructurados usando IA.
+- **Integracion**: Inyecta datos en CRMs existentes (Prop360, portales inmobiliarios).
 
-## Los 4 Agentes
+## Arquitectura de Agentes
 
-| Agente | Función |
+PAPAIA utiliza 4 agentes cognitivos especializados:
+
+| Agente | Funcion |
 |--------|---------|
-| 🎯 **Orquestador** | Guía el proceso de captación vía texto |
-| 🎙️ **Transcriptor** | Speech-to-text + extracción de datos |
-| 📸 **Estudio Fotográfico** | Selección y mejora automática de fotos |
-| 📢 **Publicador** | Genera publicaciones y distribuye a CRMs |
+| **Orquestador** | Guia el proceso de captacion via texto |
+| **Transcriptor** | Speech-to-text + extraccion de datos inmobiliarios |
+| **Fotografo** | Seleccion, categorizacion y mejora automatica de fotos |
+| **Publicador** | Genera publicaciones profesionales y distribuye a CRMs |
 
-## Stack Tecnológico
+## Stack Tecnologico
 
 - **Runtime**: Node.js 20+
-- **IA/LLM**: Gemini 1.5 Pro (Vertex AI)
-- **Visión**: Vertex AI Vision
-- **Geolocalización**: Google Maps Platform
-- **Orquestación**: Cloud Workflows + Functions
-- **WhatsApp**: Cloud API (Meta)
+- **Framework**: Express.js
+- **IA/LLM**: Google Gemini 1.5 Pro (Vertex AI)
+- **Vision**: Google Cloud Vision API
+- **Geolocalizacion**: Google Maps Platform
+- **WhatsApp**: Baileys / Cloud API (Meta)
 - **Base de datos**: Firestore
+- **Almacenamiento**: Google Cloud Storage
 
 ## Quick Start
 
 ```bash
-# Instalar dependencias
+# 1. Clonar el repositorio
+git clone <repo-url>
+cd papaia
+
+# 2. Instalar dependencias
 npm install
 
-# Configurar variables de entorno
+# 3. Configurar variables de entorno
 cp .env.example .env
 # Editar .env con tus credenciales
 
-# Desarrollo
+# 4. Ejecutar en desarrollo
 npm run dev
 
-# Tests
-npm test
+# 5. Produccion
+npm start
 ```
+
+## Variables de Entorno
+
+Ver `.env.example` para la lista completa. Las principales son:
+
+| Variable | Descripcion |
+|----------|-------------|
+| `GOOGLE_CLOUD_PROJECT` | ID del proyecto en GCP |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Ruta al archivo de credenciales |
+| `CALLBELL_API_KEY` | API Key de Callbell para WhatsApp |
+| `GOOGLE_MAPS_API_KEY` | API Key de Google Maps |
+| `PORT` | Puerto del servidor (default: 3000) |
 
 ## Estructura del Proyecto
 
 ```
 papaia/
 ├── src/
-│   ├── agents/          # Los 4 agentes core
-│   ├── integrations/    # WhatsApp, Google Cloud, CRMs
-│   ├── models/          # Schemas de datos
-│   └── utils/           # Utilidades
-├── functions/           # Cloud Functions
-├── workflows/           # Cloud Workflows
-└── tests/               # Tests
+│   ├── index.js              # Entry point - Servidor Express
+│   ├── agents/               # Los 4 agentes cognitivos
+│   │   ├── orquestador/      # Coordinacion del flujo
+│   │   ├── transcriptor/     # Procesamiento de audio/texto
+│   │   ├── fotografo/        # Procesamiento de imagenes
+│   │   └── publicador/       # Generacion de publicaciones
+│   ├── integrations/         # Integraciones externas
+│   │   ├── baileys/          # Cliente WhatsApp (Baileys)
+│   │   ├── callbell/         # WhatsApp via Callbell
+│   │   ├── google/           # Gemini, Vision, Maps
+│   │   └── crm/              # Adaptadores de CRMs
+│   ├── models/               # Esquemas de datos
+│   └── utils/                # Utilidades (logger, validators)
+├── public/                   # Frontend - Dashboard
+│   ├── index.html
+│   ├── app.js
+│   └── styles.css
+├── .env.example              # Template de variables
+└── package.json
 ```
 
-## Equipo
+## API Endpoints
 
-- **CEO**: Estrategia, Producto y Gestión del Cambio
-- **Víctor (CCO)**: Feedback del mercado inmobiliario
-- **Joaquín (CTO)**: Arquitectura de agentes
-- **Gemini**: Memoria del proyecto y soporte IA
+| Metodo | Endpoint | Descripcion |
+|--------|----------|-------------|
+| `GET` | `/health` | Health check |
+| `GET` | `/api/qr` | QR para autenticacion WhatsApp |
+| `GET` | `/api/captaciones` | Lista de captaciones activas |
+| `GET` | `/api/stats` | Estadisticas del sistema |
+| `POST` | `/webhook/callbell` | Webhook de Callbell |
 
----
+## Scripts Disponibles
 
-**"Papaia"** = Super fácil en Chile 🇨🇱
+```bash
+npm run dev      # Desarrollo con hot-reload
+npm start        # Produccion
+npm test         # Ejecutar tests
+```
+
+## Estado del Proyecto
+
+**Version**: 0.1.0 (MVP)
+
+Este es un MVP con las siguientes caracteristicas:
+- Dashboard funcional
+- Conexion WhatsApp via Baileys
+- Estructura de agentes definida
+- Modelos de datos listos
+
+**Proximos pasos**:
+- Integracion completa con Gemini
+- Persistencia en Firestore
+- Publicacion real en CRMs
+
+## Documentacion Adicional
+
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - Arquitectura detallada del sistema
+
+## Licencia
+
+MIT

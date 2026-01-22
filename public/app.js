@@ -163,8 +163,13 @@ function updateStatsUI(captures) {
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   loadCaptaciones();
+  checkWhatsAppState();
+
   // Refresh every 30 seconds
   setInterval(loadCaptaciones, 30000);
+
+  // Check QR every 5 seconds
+  setInterval(checkWhatsAppState, 5000);
 });
 
 async function approveCapture(captureId) {
@@ -235,6 +240,32 @@ function showNotification(message, type = 'success') {
     notification.style.animation = 'fadeIn 0.3s ease reverse';
     setTimeout(() => notification.remove(), 300);
   }, 3000);
+}
+
+// ==========================================
+// WhatsApp Authentication (QR)
+// ==========================================
+
+async function checkWhatsAppState() {
+  try {
+    const response = await fetch('/api/qr');
+    const { success, qr, connected } = await response.json();
+
+    const qrContainer = document.getElementById('qr-container');
+    const connectedState = document.getElementById('whatsapp-connected');
+    const qrImg = document.getElementById('qr-code-img');
+
+    if (connected) {
+      if (qrContainer) qrContainer.style.display = 'none';
+      if (connectedState) connectedState.style.display = 'block';
+    } else if (qr) {
+      if (qrContainer) qrContainer.style.display = 'block';
+      if (connectedState) connectedState.style.display = 'none';
+      if (qrImg) qrImg.src = qr;
+    }
+  } catch (error) {
+    console.error('Error checking WhatsApp state:', error);
+  }
 }
 
 // ==========================================

@@ -7,8 +7,7 @@ import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { webhookRouter } from './integrations/whatsapp/webhook.js';
-import { callbellWebhookRouter, getCaptaciones } from './integrations/callbell/webhook.js';
+import { initBaileys, getQRCode, getCaptaciones } from './integrations/baileys/client.js';
 import { logger } from './utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,11 +22,16 @@ app.use(express.json());
 // Serve static files (Dashboard)
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Routes
-app.use('/webhook', webhookRouter);           // Legacy Meta API
-app.use('/webhook/callbell', callbellWebhookRouter);  // Callbell API
+// Initialize WhatsApp (Baileys)
+initBaileys().catch(err => logger.error('Failed to init Baileys', err));
 
 // ============ API para Dashboard ============
+
+// Obtener QR para autenticación
+app.get('/api/qr', (req, res) => {
+  const qr = getQRCode();
+  res.json({ success: true, qr, connected: !qr });
+});
 
 // Obtener todas las captaciones
 app.get('/api/captaciones', (req, res) => {
@@ -70,7 +74,7 @@ app.get('/health', (req, res) => {
 // Start server
 app.listen(PORT, () => {
   logger.info(`🍈 PAPAIA corriendo en puerto ${PORT}`);
-  logger.info(`📱 Webhook disponible en /webhook`);
+  logger.info(`📱 Baileys iniciado`);
   logger.info(`📊 API disponible en /api`);
 });
 
